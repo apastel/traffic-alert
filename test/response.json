@@ -1,0 +1,643 @@
+{
+  "geocoded_waypoints": [
+    {
+      "geocoder_status": "OK",
+      "place_id": "ChIJe7PPhWMH3IARLmD8TKYZASI",
+      "types": ["establishment", "point_of_interest"]
+    },
+    {
+      "geocoder_status": "OK",
+      "place_id": "ChIJn6f8hgxV2YAR85gQMcoFcIw",
+      "types": [
+        "street_address"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "bounds": {
+        "northeast": {
+          "lat": 32.9105303,
+          "lng": -117.1166211
+        },
+        "southwest": {
+          "lat": 32.7813295,
+          "lng": -117.1809534
+        }
+      },
+      "copyrights": "Map data ©2019",
+      "legs": [
+        {
+          "distance": {
+            "text": "15.6 mi",
+            "value": 25026
+          },
+          "duration": {
+            "text": "32 mins",
+            "value": 1936
+          },
+          "duration_in_traffic": {
+            "text": "38 mins",
+            "value": 2279
+          },
+          "end_address": "2505 Escala Cir, San Diego, CA 92108, USA",
+          "end_location": {
+            "lat": 32.7819787,
+            "lng": -117.1333933
+          },
+          "start_address": "6480 Weathers Pl # 250, San Diego, CA 92121, USA",
+          "start_location": {
+            "lat": 32.9053182,
+            "lng": -117.1788487
+          },
+          "steps": [
+            {
+              "distance": {
+                "text": "305 ft",
+                "value": 93
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 18
+              },
+              "end_location": {
+                "lat": 32.9046253,
+                "lng": -117.1793986
+              },
+              "html_instructions": "Head <b>southwest</b> on <b>Weathers Pl</b> toward <b>Waples St</b>",
+              "polyline": {
+                "points": "gyygExnejUXX@BVTVN^R\\T"
+              },
+              "start_location": {
+                "lat": 32.9053182,
+                "lng": -117.1788487
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "331 ft",
+                "value": 101
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 36
+              },
+              "end_location": {
+                "lat": 32.9046261,
+                "lng": -117.1804301
+              },
+              "html_instructions": "Turn <b>right</b> onto <b>Waples St</b>",
+              "maneuver": "turn-right",
+              "polyline": {
+                "points": "}tygEfrejUITMr@@r@Fh@Ld@"
+              },
+              "start_location": {
+                "lat": 32.9046253,
+                "lng": -117.1793986
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "338 ft",
+                "value": 103
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 27
+              },
+              "end_location": {
+                "lat": 32.9054367,
+                "lng": -117.1809534
+              },
+              "html_instructions": "Turn <b>right</b> onto <b>Steadman St</b>",
+              "maneuver": "turn-right",
+              "polyline": {
+                "points": "}tygEtxejUo@TWPEBsAz@"
+              },
+              "start_location": {
+                "lat": 32.9046261,
+                "lng": -117.1804301
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "1.5 mi",
+                "value": 2448
+              },
+              "duration": {
+                "text": "3 mins",
+                "value": 192
+              },
+              "end_location": {
+                "lat": 32.9105303,
+                "lng": -117.1555442
+              },
+              "html_instructions": "Turn <b>right</b> onto <b>Mira Mesa Blvd</b>",
+              "maneuver": "turn-right",
+              "polyline": {
+                "points": "_zygE|{ejUc@eAq@sBEMa@kB[wB_@}DY{CU}BU}BMwAEc@WmCI}@e@qEa@eEEWU_CEc@AMi@cGS{Bs@_HIo@a@{Dm@yGYuCy@mIU_CAa@sAkN[gDe@qEEc@EYGe@UeACM[mAYcAYy@KW"
+              },
+              "start_location": {
+                "lat": 32.9054367,
+                "lng": -117.1809534
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.3 mi",
+                "value": 550
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 66
+              },
+              "end_location": {
+                "lat": 32.9058401,
+                "lng": -117.154795
+              },
+              "html_instructions": "Turn <b>right</b> onto <b>Parkdale Ave</b>",
+              "maneuver": "turn-right",
+              "polyline": {
+                "points": "yyzgEb}`jUh@[\\Ux@g@VKv@]p@Uj@Qz@Qr@KXEHALALALARAH?|ACbA?fA?h@BXDB@PDLFPFNJh@Z"
+              },
+              "start_location": {
+                "lat": 32.9105303,
+                "lng": -117.1555442
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.5 mi",
+                "value": 815
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 85
+              },
+              "end_location": {
+                "lat": 32.9053384,
+                "lng": -117.1462163
+              },
+              "html_instructions": "Turn <b>left</b> onto <b>Gold Coast Dr</b>",
+              "maneuver": "turn-left",
+              "polyline": {
+                "points": "o|ygEnx`jUbAmCNa@FWBQBS@Q?C@Y@a@?S?kD?iD?cDAaD?}A?cAAwA@kAAoD?]?eAAiB"
+              },
+              "start_location": {
+                "lat": 32.9058401,
+                "lng": -117.154795
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "1.0 mi",
+                "value": 1570
+              },
+              "duration": {
+                "text": "2 mins",
+                "value": 118
+              },
+              "end_location": {
+                "lat": 32.8957396,
+                "lng": -117.1350022
+              },
+              "html_instructions": "Turn <b>right</b> onto <b>Camino Ruiz</b>",
+              "maneuver": "turn-right",
+              "polyline": {
+                "points": "kyygEzb_jUXC`@CZE\\E\\Ip@Q\\MZORM@?RMFELId@[xAkA`CqBRKb@Yp@[p@Oj@QbA]HC^MDAz@_@@A\\SHGp@e@@AXYDIPQ\\g@n@mAj@_Bl@_B^kAl@sBRe@l@cB\\_Ax@cC^mADMz@iCd@uAlAgD\\q@n@eAv@iATYBCn@u@"
+              },
+              "start_location": {
+                "lat": 32.9053384,
+                "lng": -117.1462163
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.5 mi",
+                "value": 791
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 74
+              },
+              "end_location": {
+                "lat": 32.89707130000001,
+                "lng": -117.1269338
+              },
+              "html_instructions": "Turn <b>left</b> onto <b>Activity Rd</b>",
+              "maneuver": "turn-left",
+              "polyline": {
+                "points": "k}wgEv||iUKQ{@iASUAAMSCGCKIWEUAGAOCY?C?sCAiA?eBAuB?{A?y@?Q?G?c@ASAQA_@CUCYGe@I]Ow@i@_CEWGa@Ge@AMCQAM?SAY?qC"
+              },
+              "start_location": {
+                "lat": 32.8957396,
+                "lng": -117.1350022
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.2 mi",
+                "value": 361
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 56
+              },
+              "end_location": {
+                "lat": 32.893823,
+                "lng": -117.1270269
+              },
+              "html_instructions": "Turn <b>right</b> onto <b>Padgett St</b>",
+              "maneuver": "turn-right",
+              "polyline": {
+                "points": "uexgEhj{iUxDDtCBZ?lA@~ABnBB"
+              },
+              "start_location": {
+                "lat": 32.89707130000001,
+                "lng": -117.1269338
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.4 mi",
+                "value": 671
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 82
+              },
+              "end_location": {
+                "lat": 32.8938185,
+                "lng": -117.1200046
+              },
+              "html_instructions": "Turn <b>left</b> onto <b>Miramar Rd</b>",
+              "maneuver": "turn-left",
+              "polyline": {
+                "points": "kqwgE|j{iUXAIq@AiBAmCA{A?m@Ay@AgBAuB@{A?Y?}@A{A?kB?m@?gA?k@?O?MAiAAi@"
+              },
+              "start_location": {
+                "lat": 32.893823,
+                "lng": -117.1270269
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "2.7 mi",
+                "value": 4334
+              },
+              "duration": {
+                "text": "3 mins",
+                "value": 178
+              },
+              "end_location": {
+                "lat": 32.8561421,
+                "lng": -117.1186344
+              },
+              "html_instructions": "Turn <b>right</b> onto <b>Kearny Villa Rd</b>",
+              "maneuver": "turn-right",
+              "polyline": {
+                "points": "kqwgE~~yiU`@?@?v@?b@?l@ED?NCXC^KRIj@U\\UHEf@c@POPWXc@Zi@\\w@LYZq@Xi@R]PUT[BAPSd@a@@Ax@i@r@Y`@Mz@Oj@ET?rD?xC?~A?P?t@AxLCJ?n@?|@?JArA?b@ApF@vEAP?B?p@@b@?~G?jG@^?r@?bB?`A?lCAvDAb@A@?Z?tA?v@?F?hB?@?jBAfA?b@?lA?\\?jB?vEAfA?\\?D?X?h@?z@?`@?n@?~JAb@?b@?~@?x@?V?fA?X?F?V?`@?hBApB?d@?zB@z@BZBD?\\BTB\\DZDZDZDjATVH@?x@Rl@PHBnA\\n@P`@Lr@Rj@Nf@NhFxAvEpA"
+              },
+              "start_location": {
+                "lat": 32.8938185,
+                "lng": -117.1200046
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "2.6 mi",
+                "value": 4254
+              },
+              "duration": {
+                "text": "3 mins",
+                "value": 154
+              },
+              "end_location": {
+                "lat": 32.8255699,
+                "lng": -117.1447878
+              },
+              "html_instructions": "Turn <b>right</b> to merge onto <b>CA-163 S</b>",
+              "maneuver": "ramp-right",
+              "polyline": {
+                "points": "{epgElvyiUKh@CNCL?JAL?H?H@HBLBJBJBJ?LDLHPFL@BDFJPHJJLJJHHLH@@p@d@b@XB@l@b@d@\\DB\\Z^\\RXJJLPLPV^PZLRDHNVNRPVBB@BBB@@@@B@HDTHb@j@^^f@j@Z\\ZXXXd@d@xBhBXV~@t@XV\\V^ZhDxCdFjEbFlEx@r@\\X|G`G\\XZXZVjDzCfDrCzIxH@@@?VTp@l@@@`@\\@@TRVR?@NJ?@bAbA|ClCbAdA|ArA`@VvAlAhDtCx@r@ZXvD`DnFlEVPZThA~@jAx@n@d@vA`A~@f@bB~@B@ZPB@p@XbAd@pAj@B@^PfKtEnAj@~@b@pAj@^NNHFDFDTNPFXLbJ`E"
+              },
+              "start_location": {
+                "lat": 32.8561421,
+                "lng": -117.1186344
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.3 mi",
+                "value": 545
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 42
+              },
+              "end_location": {
+                "lat": 32.8228856,
+                "lng": -117.1488679
+              },
+              "html_instructions": "Take the exit toward <b>Balboa Ave</b>/<wbr/><b>CA-274 W</b>",
+              "maneuver": "ramp-right",
+              "polyline": {
+                "points": "yfjgE|y~iU@F?@@@@@@BBB@@BBLLZPTNPJLHZNBBn@^v@`@v@XPN@@`@Th@ZJFd@XHFNP@@FHJPHNHRDTDV@H@V?F@N?X?FAlA?vC?j@"
+              },
+              "start_location": {
+                "lat": 32.8255699,
+                "lng": -117.1447878
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "397 ft",
+                "value": 121
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 30
+              },
+              "end_location": {
+                "lat": 32.8218915,
+                "lng": -117.149015
+              },
+              "html_instructions": "Turn <b>left</b> onto <b>Mercury St</b>",
+              "maneuver": "turn-left",
+              "polyline": {
+                "points": "avigEls_jU@VTBn@?N?nB@"
+              },
+              "start_location": {
+                "lat": 32.8228856,
+                "lng": -117.1488679
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.2 mi",
+                "value": 396
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 58
+              },
+              "end_location": {
+                "lat": 32.8217493,
+                "lng": -117.1449324
+              },
+              "html_instructions": "Turn <b>left</b> onto <b>Balboa Ave</b>",
+              "maneuver": "turn-left",
+              "polyline": {
+                "points": "yoigEjt_jUX?@c@?g@?uA@w@@k@BsA?M?A?WAI?I?S?A?K?G?]?C?I?M?U?o@Ck@AYAe@AI@[AC?c@@]@Y"
+              },
+              "start_location": {
+                "lat": 32.8218915,
+                "lng": -117.149015
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.9 mi",
+                "value": 1489
+              },
+              "duration": {
+                "text": "2 mins",
+                "value": 125
+              },
+              "end_location": {
+                "lat": 32.810177,
+                "lng": -117.1509856
+              },
+              "html_instructions": "Turn <b>right</b> onto <b>Kearny Villa Rd</b>",
+              "maneuver": "turn-right",
+              "polyline": {
+                "points": "}nigExz~iURYZUPGLHJJVTJJPRNVB@NVLZXh@Rl@HLDHHRP\\h@`ANTPV\\b@@BRT`@^RRRPn@d@XR\\RFBvGzCJFD?D@LAZNv@^b@PPHRJ\\NxAp@DJ?@@@@@PHz@^n@XdAb@FBx@TNB^Jf@Hd@FXBb@B\\@P@\\?rA?hBC`A?J?Z?J@XB^Fb@HRF|CtA"
+              },
+              "start_location": {
+                "lat": 32.8217493,
+                "lng": -117.1449324
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "1.2 mi",
+                "value": 2004
+              },
+              "duration": {
+                "text": "3 mins",
+                "value": 184
+              },
+              "end_location": {
+                "lat": 32.8098835,
+                "lng": -117.129941
+              },
+              "html_instructions": "Turn <b>left</b> onto <b>Aero Dr</b>",
+              "maneuver": "turn-left",
+              "polyline": {
+                "points": "sfggEt``jUXNL_@t@eCDUFWHg@BYDg@B]@kA?kACkD?i@EkHAeD?[AkBA{CAuA?aAAa@?cA?_AEaEAm@AmC?WAgCAwB?EA{AAGISAcBAuAAqB?Y?s@CwCAcD?GCmD?iBAw@CqFAiE?IAeB?u@"
+              },
+              "start_location": {
+                "lat": 32.810177,
+                "lng": -117.1509856
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.6 mi",
+                "value": 921
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 84
+              },
+              "end_location": {
+                "lat": 32.8018993,
+                "lng": -117.1289165
+              },
+              "html_instructions": "Turn <b>right</b> onto <b>Ruffin Rd</b>",
+              "maneuver": "turn-right",
+              "polyline": {
+                "points": "wdggEb}{iUFg@h@EXCb@IDCRC\\KZM@?LGLGpB_APGBARIPGJCNCLEPCNARCNARAPAvD?X?p@@l@?z@?@?`A?v@A^?F?fAAp@EZA^Ab@?X?J?lB?V@X?D@H?D@F@F@THHB\\N"
+              },
+              "start_location": {
+                "lat": 32.8098835,
+                "lng": -117.129941
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "1.1 mi",
+                "value": 1827
+              },
+              "duration": {
+                "text": "2 mins",
+                "value": 127
+              },
+              "end_location": {
+                "lat": 32.7874454,
+                "lng": -117.1204314
+              },
+              "html_instructions": "Turn <b>left</b> onto <b>Mission Village Dr</b>",
+              "maneuver": "turn-left",
+              "polyline": {
+                "points": "{regEvv{iUPF\\kA?AL[LULWLMX[FGHGNKPIDC@A?ADOZO~@e@x@_@|@_@~BgA`Bu@t@]|@a@rCsAfAe@zBeAt@]|@c@jB}@j@WbAg@bB_AvA}@x@i@pBqAl@]VC`@SHERM^U^UzA_AzCiB^UtAw@VOj@YBARIXIVGTEJCNCd@Gr@EtBSD?p@G`@EJA`@E"
+              },
+              "start_location": {
+                "lat": 32.8018993,
+                "lng": -117.1289165
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.1 mi",
+                "value": 234
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 19
+              },
+              "end_location": {
+                "lat": 32.7863228,
+                "lng": -117.122456
+              },
+              "html_instructions": "Turn <b>right</b> onto the <b>Friars Rd W</b> ramp",
+              "maneuver": "ramp-right",
+              "polyline": {
+                "points": "qxbgEtaziUDLBFBDBD@@TVBDn@v@\\`@LNHLFHDHFL@@BLHT@@BJFXBNFjA?@@@?@@?@@?@@@DB"
+              },
+              "start_location": {
+                "lat": 32.7874454,
+                "lng": -117.1204314
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.6 mi",
+                "value": 1043
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 84
+              },
+              "end_location": {
+                "lat": 32.7813295,
+                "lng": -117.1315608
+              },
+              "html_instructions": "Merge onto <b>Friars Rd</b>",
+              "maneuver": "merge",
+              "polyline": {
+                "points": "oqbgEjnziUBdB@ZBrA@RD\\B\\BRBNLj@Ll@Pd@Tp@lAjD`@fAFN`@|@Xj@JPHPJNJNfBjCLV~D~FV^V^|@pAlBhCHD@BFLJLf@n@fAvA"
+              },
+              "start_location": {
+                "lat": 32.7863228,
+                "lng": -117.122456
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.1 mi",
+                "value": 201
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 52
+              },
+              "end_location": {
+                "lat": 32.7827698,
+                "lng": -117.1328523
+              },
+              "html_instructions": "Turn <b>right</b> onto <b>Fenton Pkwy</b><div style=\"font-size:0.9em\">Restricted usage road</div>",
+              "maneuver": "turn-right",
+              "polyline": {
+                "points": "iragEfg|iUm@p@SRKJMHi@b@[Vq@f@QNy@p@"
+              },
+              "start_location": {
+                "lat": 32.7813295,
+                "lng": -117.1315608
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "427 ft",
+                "value": 130
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 36
+              },
+              "end_location": {
+                "lat": 32.7819771,
+                "lng": -117.1336475
+              },
+              "html_instructions": "Turn <b>left</b> onto <b>Escala Way</b>/<wbr/><b>Escala Cir</b><div style=\"font-size:0.9em\">Restricted usage road</div>",
+              "maneuver": "turn-left",
+              "polyline": {
+                "points": "i{agEho|iULVT^BDBFBD@DFRFZ@HJNB@B@B@F?L?F?b@A"
+              },
+              "start_location": {
+                "lat": 32.7827698,
+                "lng": -117.1328523
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "79 ft",
+                "value": 24
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 9
+              },
+              "end_location": {
+                "lat": 32.7819787,
+                "lng": -117.1333933
+              },
+              "html_instructions": "Turn <b>left</b> to stay on <b>Escala Way</b>/<wbr/><b>Escala Cir</b><div style=\"font-size:0.9em\">Restricted usage road</div><div style=\"font-size:0.9em\">Destination will be on the right</div>",
+              "maneuver": "turn-left",
+              "polyline": {
+                "points": "kvagEht|iU?s@"
+              },
+              "start_location": {
+                "lat": 32.7819771,
+                "lng": -117.1336475
+              },
+              "travel_mode": "DRIVING"
+            }
+          ],
+          "traffic_speed_entry": [],
+          "via_waypoint": []
+        }
+      ],
+      "overview_polyline": {
+        "points": "gyygExnejUZ\\n@d@|@h@ITMr@@r@Fh@Ld@o@T]TsAz@c@eAw@aCa@kB[wBy@yIk@{Fu@gIcBoPeAqL}@oIoAuMsAcNWaD{Ci[M_AYsAu@qCe@qAfAq@pAs@hBs@fBc@dBUx@E`DCfA?h@B\\F^L`@Rh@ZbAmCVy@Fe@DqA?mOC{VAiBXC|@Iz@OnA_@dAk@tCwBtC}BtAu@|Aa@lAa@bBq@zAcA^c@n@y@n@mAj@_BlAkD`AyCjAcDzCiJrB}FlAwBlAcBr@y@gA{AUW_@_AMgAAgIC}IKaBQcAy@wDWmBGmA?qCxDDpDBlDDhC@Iq@AiBCiFEeI?}OCqC~B?|AMr@UhAk@p@i@b@g@t@mAj@qAt@{Ad@s@X]v@u@z@k@tAg@z@Oj@EhE?`IArPCtJA~G?nR@fJAxNChSCx^AjDAvC?zB@z@B`@B\\BjBT`Cd@`EfApDbApGhBvEpAKh@G\\AXDj@FVBXXp@f@r@d@`@fCdBj@`@|@x@z@hA|@xA~@rALFTHb@j@fAjAv@v@rE`EvC`Cb`@v\\xWfUbBvA`FrEbAdA|ArAxBdBvLdKlJtHzB~AvChBbCrAfUbK`EhBNJf@V|JnE@HHJn@d@pAt@r@b@v@`@v@XRP`@Tt@b@n@`@d@n@Rb@Jl@Bh@?~B?bE@VTB~@?hC@ByEBoE?eBIeE@aA@YRYZUPGXTb@`@`@j@z@~Al@xAz@~A`@l@^f@t@t@pB~Ad@VbHbDJ@LAZNzAp@d@TvB`ADLpAl@tB|@`AXn@NlAPlBJpB?jDCf@?d@DbAPpD|AXNL_@z@{CP_AHaADiBCwFGwOE_LMcUEaFISAcBCgEEiKEwIGkP?u@Fg@bAIzA]x@]zCsAz@UdAKd@CpE?|C@`DAxBGz@CvD?`ABj@Nf@RPF\\kAL]Zm@x@y@f@YFSrEuBbV{KxGaDzD}Bx@i@~CoBVC`@S\\S~@k@lJwFbAi@VKrA[t@KhDYdBO`@EDLFL^d@dBvBVb@Rp@Jh@FlADD@BDBBdBDnBFp@XlB^rAbB|Eh@vAz@hBl@bAtBbDvE~GtApBvBnC|@nAfAvAm@p@_@^eClBkA`Ab@v@LXNn@LXRDT?b@A?s@"
+      },
+      "summary": "Kearny Villa Rd",
+      "warnings": [],
+      "waypoint_order": []
+    }
+  ],
+  "status": "OK"
+}
