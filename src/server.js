@@ -108,6 +108,7 @@ app.post(
         if (!withinCommuteTimeWindow(d1, d2, timeZone)) {
             console.log('Not within commute time window.')
             store[triggerIdentity].thresholdMultiplier = 0
+            delete store[triggerIdentity].lastNotifiedDuration
             res.status(200).send({ data })
             return
         }
@@ -148,8 +149,6 @@ app.post(
                             }
                         })
                     }
-                } else {
-                    delete store[triggerIdentity].lastNotifiedDuration
                 }
 
                 res.status(200).send({
