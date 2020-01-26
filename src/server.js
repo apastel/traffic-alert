@@ -3,37 +3,71 @@ import { post } from 'axios'
 import { config } from 'dotenv'
 import { serviceKeyCheck } from './middleware'
 import { generateUniqueId } from './helpers'
+import * as GoogleMaps from '@google/maps'
+import { Firestore, FieldValue } from '@google-cloud/firestore'
 
 config()
 const { IFTTT_KEY } = process.env
 const { GOOGLE_MAPS_KEY } = process.env
-const googleMapsClient = require('@google/maps').createClient({
+const googleMapsClient = GoogleMaps.createClient({
     key: GOOGLE_MAPS_KEY,
     Promise
 })
+const firestore = new Firestore()
 
-const store = {}
 const app = express()
 app.use(express.json())
 
+const addTriggerIdentity = async (triggerIdentity, newObj) => {
+    console.log(`adding trigger identity ${triggerIdentity}`)
+    const document = firestore.doc(`triggerIdentities/${triggerIdentity}`)
+    await document.set(newObj)
+}
+
+const updateTriggerIdentity = async (triggerIdentity, updateProp) => {
+    console.log(`updating trigger identity ${triggerIdentity}`)
+    const document = firestore.doc(`triggerIdentities/${triggerIdentity}`)
+    await document.update({
+        updateProp
+    }, { merge: true })
+}
+
+const deleteTriggerIdentityField = async (triggerIdentity, field) => {
+    console.log(`deleting field ${field} from triggerIdentity ${triggerIdentity}`)
+    const document = firestore.doc(`triggerIdentities/${triggerIdentity}`)
+    await document.update({
+        [field]: FieldValue.delete()
+    }, { merge: true })
+}
+
+const getTriggerIdentity = async (triggerIdentity) => {
+    const document = firestore.doc(`triggerIdentities/${triggerIdentity}`)
+    return document.get()
+}
+
+const deleteTriggerIdentity = async (triggerIdentity) => {
+    const document = firestore.doc(`triggerIdentities/${triggerIdentity}`)
+    await document.delete()
+}
+
 const withinCommuteTimeWindow = (d1, d2, timeZone) => {
     const now = new Date(new Date().toLocaleString('en-US', { timeZone }))
+    console.log(`${d1} <= ${now} <= ${d2}`)
     return now >= d1 && now <= d2
 }
 
 const commuteHasDecreasedSincePreviousNotification = (triggerIdentity, durationInTraffic) => {
     const amountDecreased = 5 // minutes
-    if (!store[triggerIdentity].lastNotifiedDuration) {
+    const triggerIdObj = getTriggerIdentity(triggerIdentity)
+    if (!triggerIdObj.lastNotifiedDuration) {
         console.log(`${triggerIdentity}: No prior notification for this time window`)
-        console.log(`${JSON.stringify(store)}`)
         return true
     }
-    if (durationInTraffic <=
-        store[triggerIdentity].lastNotifiedDuration - (amountDecreased * store[triggerIdentity].thresholdMultiplier)) {
+    if (durationInTraffic <= triggerIdObj.lastNotifiedDuration - amountDecreased) {
         console.log(`${triggerIdentity}: Commute decreased at least ${amountDecreased} minutes since last notification`)
         return true
     }
-    console.log(`${triggerIdentity}: Commute has not decreased by ${amountDecreased} min since last notification at ${store[triggerIdentity].lastNotifiedDuration}`)
+    console.log(`${triggerIdentity}: Commute has not decreased by ${amountDecreased} min since last notification at ${triggerIdObj.lastNotifiedDuration}`)
     return false
 }
 
@@ -48,10 +82,6 @@ app.get('/', (req, res) => {
 // The status
 app.get('/ifttt/v1/status', serviceKeyCheck, (req, res) => {
     res.status(200).send()
-})
-
-app.get('/data', (req, res) => {
-    res.status(200).send(JSON.stringify(store, null, 2))
 })
 
 // The test/setup endpoint
@@ -95,20 +125,19 @@ app.post(
         d2.setHours(parseInt(windowEnd))
         d2.setMinutes(0)
         d2.setSeconds(0)
-        if (!Object.keys(store).includes(triggerIdentity)) {
-            store[triggerIdentity] = {
-                thresholdMultiplier: 0,
+        if (!getTriggerIdentity(triggerIdentity)) {
+            const newObj = {
                 timeZone,
                 windowStart: d1,
                 windowEnd: d2
             }
+            addTriggerIdentity(triggerIdentity, newObj)
         }
         console.log(`trigger_identity: ${triggerIdentity}`)
         const data = []
         if (!withinCommuteTimeWindow(d1, d2, timeZone)) {
             console.log('Not within commute time window.')
-            store[triggerIdentity].thresholdMultiplier = 0
-            delete store[triggerIdentity].lastNotifiedDuration
+            deleteTriggerIdentityField(triggerIdentity, 'lastNotifiedDuration')
             res.status(200).send({ data })
             return
         }
@@ -135,8 +164,7 @@ app.post(
                     console.log(`${triggerIdentity}: Commute is below threshold`)
                     if (commuteHasDecreasedSincePreviousNotification(triggerIdentity, durationInTraffic)) {
                         console.log('Generating trigger data')
-                        store[triggerIdentity].lastNotifiedDuration = durationInTraffic
-                        store[triggerIdentity].thresholdMultiplier++
+                        updateTriggerIdentity(triggerIdentity, { lastNotifiedDuration: durationInTraffic })
                         data.push({
                             commute_duration: durationInTraffic,
                             origin_address: originAddress,
@@ -164,8 +192,8 @@ app.post(
 
 app.delete('/ifttt/v1/triggers/threshold_reached/trigger_identity/:triggerId', serviceKeyCheck, (req, res) => {
     const triggerIdentity = req.params.triggerId
-    if (store[triggerIdentity]) {
-        delete store[triggerIdentity]
+    if (getTriggerIdentity(triggerIdentity)) {
+        deleteTriggerIdentity(triggerIdentity)
         console.log(`Deleted trigger identity ${triggerIdentity}`)
     } else {
         console.log(`Trigger identity ${triggerIdentity} not found in database`)
@@ -177,14 +205,15 @@ const listener = app.listen(process.env.PORT, () => {
     console.log(`Your app is listening on port ${listener.address().port}`)
 })
 
-function enableRealtimeAPI () {
-    Object.keys(store).forEach((triggerIdentity) => {
-        console.log(`${triggerIdentity}: Checking if within commute window for Realtime API`)
-        if (withinCommuteTimeWindow(store[triggerIdentity].windowStart, store[triggerIdentity].windowEnd, store[triggerIdentity].timeZone)) {
+const enableRealtimeAPI = async () => {
+    const documents = await firestore.collection('triggerIdentities').get()
+    documents.forEach((triggerIdentity) => {
+        console.log(`${triggerIdentity.id}: Checking if within commute window for Realtime API`)
+        if (withinCommuteTimeWindow(triggerIdentity.windowStart, triggerIdentity.windowEnd, triggerIdentity.timeZone)) {
             post('https://realtime.ifttt.com/v1/notifications',
                 {
                     data: [{
-                        trigger_identity: triggerIdentity
+                        trigger_identity: triggerIdentity.id
                     }]
                 }, {
                     headers: {
@@ -194,15 +223,16 @@ function enableRealtimeAPI () {
                 }
             )
                 .then((response) => {
-                    console.log(`Notified IFTTT to poll trigger_identity ${triggerIdentity}`)
+                    console.log(`Notified IFTTT to poll trigger_identity ${triggerIdentity.id}`)
                 })
                 .catch((error) => {
                     console.error(error)
                 })
         } else {
-            console.log(`${triggerIdentity}: Not within commute window for Realtime API`)
+            console.log(`${triggerIdentity.id}: Not within commute window for Realtime API`)
+            deleteTriggerIdentityField(triggerIdentity, 'lastNotifiedDuration')
         }
     })
 }
 
-setInterval(enableRealtimeAPI, 60 * 1000)
+setInterval(enableRealtimeAPI, 60_000)
