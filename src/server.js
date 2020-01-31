@@ -33,9 +33,15 @@ const updateTriggerIdentity = async (triggerIdentity, updateProp) => {
 const deleteTriggerIdentityField = async (triggerIdentity, field) => {
     console.log(`deleting field ${field} from triggerIdentity ${triggerIdentity}`)
     const document = firestore.doc(`triggerIdentities/${triggerIdentity}`)
-    await document.update({
-        [field]: FieldValue.delete()
-    }, { merge: true })
+    if (document.exists) {
+        const data = document.data()
+        if (field in data) {
+            await document.update({
+                [field]: FieldValue.delete()
+            }, { merge: true })
+            console.log('deleted field')
+        }
+    }
 }
 
 const getTriggerIdentity = async (triggerIdentity) => {
@@ -56,8 +62,16 @@ const deleteTriggerIdentity = async (triggerIdentity) => {
 
 const withinCommuteTimeWindow = (d1, d2, timeZone) => {
     const now = new Date(new Date().toLocaleString('en-US', { timeZone }))
-    console.log(`${d1} <= ${now} <= ${d2}`)
-    return now >= d1 && now <= d2
+    const windowStart = new Date(new Date().toLocaleString('en-US', { timeZone }))
+    const windowEnd = new Date(new Date().toLocaleString('en-US', { timeZone }))
+    windowStart.setHours(d1.getHours())
+    windowStart.setMinutes(d1.getMinutes())
+    windowStart.setSeconds(0)
+    windowEnd.setHours(d2.getHours())
+    windowEnd.setMinutes(d2.getMinutes())
+    windowEnd.setSeconds(0)
+    console.log(`${windowStart} <= ${now} <= ${windowEnd}`)
+    return now >= windowStart && now <= windowEnd
 }
 
 const commuteHasDecreasedSincePreviousNotification = async (triggerIdentity, durationInTraffic) => {
@@ -200,7 +214,7 @@ app.delete('/ifttt/v1/triggers/threshold_reached/trigger_identity/:triggerId', s
     const triggerIdentity = req.params.triggerId
     if (await getTriggerIdentity(triggerIdentity).exists) {
         deleteTriggerIdentity(triggerIdentity)
-        console.log(`Deleted trigger identity ${triggerIdentity}`)
+        console.log('Deleted trigger identity', triggerIdentity)
     } else {
         console.log(`Trigger identity ${triggerIdentity} not found in database`)
     }
@@ -213,14 +227,14 @@ const listener = app.listen(process.env.PORT, () => {
 
 const enableRealtimeAPI = async () => {
     const documents = await firestore.collection('triggerIdentities').get()
-    console.log('documents: ', documents)
-    documents.forEach((triggerIdentity) => {
-        console.log(`${triggerIdentity.id}: Checking if within commute window for Realtime API`)
-        if (withinCommuteTimeWindow(triggerIdentity.windowStart, triggerIdentity.windowEnd, triggerIdentity.timeZone)) {
+    documents.forEach(async (triggerIdDoc) => {
+        console.log(`${triggerIdDoc.id}: Checking if within commute window for Realtime API`)
+        const { windowStart, windowEnd, timeZone } = triggerIdDoc.data()
+        if (withinCommuteTimeWindow(windowStart.toDate(), windowEnd.toDate(), timeZone)) {
             post('https://realtime.ifttt.com/v1/notifications',
                 {
                     data: [{
-                        trigger_identity: triggerIdentity.id
+                        trigger_identity: triggerIdDoc.id
                     }]
                 }, {
                     headers: {
@@ -230,16 +244,16 @@ const enableRealtimeAPI = async () => {
                 }
             )
                 .then((response) => {
-                    console.log(`Notified IFTTT to poll trigger_identity ${triggerIdentity.id}`)
+                    console.log('Notified IFTTT to poll trigger_identity', triggerIdDoc.id)
                 })
                 .catch((error) => {
                     console.error(error)
                 })
         } else {
-            console.log(`${triggerIdentity.id}: Not within commute window for Realtime API`)
-            deleteTriggerIdentityField(triggerIdentity, 'lastNotifiedDuration')
+            console.log(`${triggerIdDoc.id}: Not within commute window for Realtime API`)
+            deleteTriggerIdentityField(triggerIdDoc.id, 'lastNotifiedDuration')
         }
     })
 }
 
-// setInterval(enableRealtimeAPI, 60_000)
+setInterval(enableRealtimeAPI, 60000)
