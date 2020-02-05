@@ -62,6 +62,10 @@ const deleteTriggerIdentity = async (triggerIdentity) => {
 
 const withinCommuteTimeWindow = (d1, d2, timeZone) => {
     const now = new Date(new Date().toLocaleString('en-US', { timeZone }))
+    if (now.getDay() < 1 || now.getDay() > 5) {
+        console.log('No commutes on weekends')
+        return
+    }
     const windowStart = new Date(new Date().toLocaleString('en-US', { timeZone }))
     const windowEnd = new Date(new Date().toLocaleString('en-US', { timeZone }))
     windowStart.setHours(d1.getHours())
