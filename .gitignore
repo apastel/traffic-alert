@@ -105,3 +105,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Secret stuff
+.gitsecret/keys/random_seed
+secret/*.json
