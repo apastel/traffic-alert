@@ -94,6 +94,17 @@ const commuteHasDecreasedSincePreviousNotification = async (triggerIdentity, dur
     return false
 }
 
+const createEventsArray = async (limit) => {
+    console.log('creating events array, limit is ', limit)
+    const query = await firestore.collection('events').orderBy('meta.timestamp', 'desc').limit(limit).get()
+    const events = []
+    query.forEach(event => {
+        events.push(event.data())
+    })
+    console.log('events: ', events)
+    return events
+}
+
 // The status
 app.get('/', (req, res) => {
     res
@@ -139,6 +150,7 @@ app.post(
         )
         const windowStart = req.body.triggerFields.commute_window_start
         const windowEnd = req.body.triggerFields.commute_window_end
+        const limit = req.body.limit ? req.body.limit : 50
         const timeZone = req.body.user.timezone
         const d1 = new Date(new Date().toLocaleString('en-US', { timeZone }))
         d1.setHours(parseInt(windowStart))
@@ -161,11 +173,7 @@ app.post(
         if (!withinCommuteTimeWindow(d1, d2, timeZone)) {
             console.log('Not within commute time window.')
             deleteTriggerIdentityField(triggerIdentity, 'lastNotifiedDuration')
-            let events = await firestore.collection('events').get()
-            events = (events) 
-                ? events.sort((a, b) => (a.data().meta.timestamp > b.data().meta.timestamp) ? 1 : ((b.data().meta.timestamp > a.data().meta.timestamp) ? -1 : 0))
-                : []
-            res.status(200).send({ data: events })
+            res.status(200).send({ data: createEventsArray(limit) })
             return
         }
         console.log(
@@ -206,12 +214,8 @@ app.post(
                         await addDocument('events', event.meta.id, event)
                     }
                 }
-                let events = await firestore.collection('events').get()
-                events = (events) 
-                    ? events.sort((a, b) => (a.data().meta.timestamp > b.data().meta.timestamp) ? 1 : ((b.data().meta.timestamp > a.data().meta.timestamp) ? -1 : 0))
-                    : []
                 res.status(200).send({
-                    data: events
+                    data: createEventsArray(limit)
                 })
             })
             .catch((err) => {
