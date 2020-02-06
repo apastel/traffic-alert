@@ -18,10 +18,10 @@ const firestore = new Firestore()
 const app = express()
 app.use(express.json())
 
-const addTriggerIdentity = async (triggerIdentity, newObj) => {
-    console.log(`adding trigger identity ${triggerIdentity}`)
-    const document = firestore.doc(`triggerIdentities/${triggerIdentity}`)
-    await document.set(newObj)
+const addDocument = async (collection, id, doc) => {
+    console.log(`adding document ${id} to collection ${collection}`)
+    const document = firestore.doc(`${collection}/${id}`)
+    await document.set(doc)
 }
 
 const updateTriggerIdentity = async (triggerIdentity, updateProp) => {
@@ -150,19 +150,22 @@ app.post(
         d2.setSeconds(0)
         const document = await getTriggerIdentity(triggerIdentity)
         if (!document.exists) {
-            const newObj = {
+            const doc = {
                 timeZone,
                 windowStart: d1,
                 windowEnd: d2
             }
-            addTriggerIdentity(triggerIdentity, newObj)
+            addDocument('triggerIdentities', triggerIdentity, doc)
         }
         console.log(`trigger_identity: ${triggerIdentity}`)
-        const data = []
         if (!withinCommuteTimeWindow(d1, d2, timeZone)) {
             console.log('Not within commute time window.')
             deleteTriggerIdentityField(triggerIdentity, 'lastNotifiedDuration')
-            res.status(200).send({ data })
+            let events = await firestore.collection('events').get()
+            events = (events) 
+                ? events.sort((a, b) => (a.data().meta.timestamp > b.data().meta.timestamp) ? 1 : ((b.data().meta.timestamp > a.data().meta.timestamp) ? -1 : 0))
+                : []
+            res.status(200).send({ data: events })
             return
         }
         console.log(
@@ -189,7 +192,7 @@ app.post(
                     if (await commuteHasDecreasedSincePreviousNotification(triggerIdentity, durationInTraffic)) {
                         console.log('Generating trigger data')
                         updateTriggerIdentity(triggerIdentity, { lastNotifiedDuration: durationInTraffic })
-                        data.push({
+                        const event = {
                             commute_duration: durationInTraffic,
                             origin_address: originAddress,
                             destination_address: destinationAddress,
@@ -199,12 +202,16 @@ app.post(
                                 id: generateUniqueId(),
                                 timestamp: Math.floor(Date.now() / 1000) // This returns a unix timestamp in seconds.
                             }
-                        })
+                        }
+                        await addDocument('events', event.meta.id, event)
                     }
                 }
-
+                let events = await firestore.collection('events').get()
+                events = (events) 
+                    ? events.sort((a, b) => (a.data().meta.timestamp > b.data().meta.timestamp) ? 1 : ((b.data().meta.timestamp > a.data().meta.timestamp) ? -1 : 0))
+                    : []
                 res.status(200).send({
-                    data
+                    data: events
                 })
             })
             .catch((err) => {
