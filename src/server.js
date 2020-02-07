@@ -96,6 +96,9 @@ const commuteHasDecreasedSincePreviousNotification = async (triggerIdentity, dur
 
 const createEventsArray = async (limit) => {
     console.log('creating events array, limit is ', limit)
+    if (limit <= 0) {
+        return []
+    }
     const query = await firestore.collection('events').orderBy('meta.timestamp', 'desc').limit(limit).get()
     const events = []
     query.forEach(event => {
@@ -150,7 +153,7 @@ app.post(
         )
         const windowStart = req.body.triggerFields.commute_window_start
         const windowEnd = req.body.triggerFields.commute_window_end
-        const limit = req.body.limit ? req.body.limit : 50
+        const limit = (req.body.limit != null) ? req.body.limit : 50
         const timeZone = req.body.user.timezone
         const d1 = new Date(new Date().toLocaleString('en-US', { timeZone }))
         d1.setHours(parseInt(windowStart))
@@ -173,7 +176,7 @@ app.post(
         if (!withinCommuteTimeWindow(d1, d2, timeZone)) {
             console.log('Not within commute time window.')
             deleteTriggerIdentityField(triggerIdentity, 'lastNotifiedDuration')
-            res.status(200).send({ data: createEventsArray(limit) })
+            res.status(200).send({ data: await createEventsArray(limit) })
             return
         }
         console.log(
@@ -215,7 +218,7 @@ app.post(
                     }
                 }
                 res.status(200).send({
-                    data: createEventsArray(limit)
+                    data: await createEventsArray(limit)
                 })
             })
             .catch((err) => {
