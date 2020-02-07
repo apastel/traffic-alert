@@ -227,7 +227,8 @@ app.post(
 
 app.delete('/ifttt/v1/triggers/threshold_reached/trigger_identity/:triggerId', serviceKeyCheck, async (req, res) => {
     const triggerIdentity = req.params.triggerId
-    if (await getTriggerIdentity(triggerIdentity).exists) {
+    const document = await getTriggerIdentity(triggerIdentity)
+    if (document.exists) {
         deleteTriggerIdentity(triggerIdentity)
         console.log('Deleted trigger identity', triggerIdentity)
     } else {
