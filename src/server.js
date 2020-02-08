@@ -33,14 +33,19 @@ const updateTriggerIdentity = async (triggerIdentity, updateProp) => {
 const deleteTriggerIdentityField = async (triggerIdentity, field) => {
     console.log(`deleting field ${field} from triggerIdentity ${triggerIdentity}`)
     const document = firestore.doc(`triggerIdentities/${triggerIdentity}`)
-    if (document.exists) {
-        const data = document.data()
+    const snapshot = await document.get()
+    if (snapshot.exists) {
+        const data = snapshot.data()
         if (field in data) {
             await document.update({
                 [field]: FieldValue.delete()
             }, { merge: true })
             console.log('deleted field')
-        }
+        } else {
+            console.log(`field ${field} does not exist for triggerIdentity ${triggerIdentity} with data ${JSON.stringify(data)}`)
+         }
+    } else {
+        console.log('document does not exist for triggerIdentity ', triggerIdentity)
     }
 }
 
@@ -104,7 +109,7 @@ const createEventsArray = async (limit) => {
     query.forEach(event => {
         events.push(event.data())
     })
-    console.log('events: ', events)
+    events.forEach(event => console.log(`${event.meta.id} ${event.meta.timestamp}`))
     return events
 }
 
@@ -175,7 +180,7 @@ app.post(
         console.log(`trigger_identity: ${triggerIdentity}`)
         if (!withinCommuteTimeWindow(d1, d2, timeZone)) {
             console.log('Not within commute time window.')
-            deleteTriggerIdentityField(triggerIdentity, 'lastNotifiedDuration')
+            await deleteTriggerIdentityField(triggerIdentity, 'lastNotifiedDuration')
             res.status(200).send({ data: await createEventsArray(limit) })
             return
         }
@@ -270,7 +275,7 @@ const enableRealtimeAPI = async () => {
                 })
         } else {
             console.log(`${triggerIdDoc.id}: Not within commute window for Realtime API`)
-            deleteTriggerIdentityField(triggerIdDoc.id, 'lastNotifiedDuration')
+            await deleteTriggerIdentityField(triggerIdDoc.id, 'lastNotifiedDuration')
         }
     })
 }
