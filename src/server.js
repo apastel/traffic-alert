@@ -43,7 +43,7 @@ const deleteTriggerIdentityField = async (triggerIdentity, field) => {
             console.log('deleted field')
         } else {
             console.log(`field ${field} does not exist for triggerIdentity ${triggerIdentity} with data ${JSON.stringify(data)}`)
-         }
+        }
     } else {
         console.log('document does not exist for triggerIdentity ', triggerIdentity)
     }
