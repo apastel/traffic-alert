@@ -109,7 +109,7 @@ const createEventsArray = async (limit) => {
     query.forEach(event => {
         events.push(event.data())
     })
-    events.forEach(event => console.log(`${event.meta.id} ${event.meta.timestamp}`))
+    console.log('events size is ', events.length)
     return events
 }
 
