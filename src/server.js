@@ -30,13 +30,31 @@ const updateTriggerIdentity = async (triggerIdentity, updateProp) => {
     await document.update(updateProp, { merge: true })
 }
 
+const addEvent = async (triggerIdentity, event) => {
+    console.log(`adding event ${event.id} to triggerIdentity ${triggerIdentity}`)
+    const document = firestore.doc(`triggerIdentities/${triggerIdentity}`)
+    const snapshot = await document.get()
+    if (snapshot.exists) {
+        const data = snapshot.data()
+        let eventsArr = []
+        if (data.hasOwnProperty('events')) {
+            console.log(`${triggerIdentity}: events field existed already`)
+            eventsArr = data.events
+        }
+        eventsArr.unshift(event)
+        await document.update({ events: eventsArr }, { merge: true })
+    } else {
+        console.log('document does not exist for triggerIdentity ', triggerIdentity)
+    }
+}
+
 const deleteTriggerIdentityField = async (triggerIdentity, field) => {
     console.log(`deleting field ${field} from triggerIdentity ${triggerIdentity}`)
     const document = firestore.doc(`triggerIdentities/${triggerIdentity}`)
     const snapshot = await document.get()
     if (snapshot.exists) {
         const data = snapshot.data()
-        if (field in data) {
+        if (data.hasOwnProperty(field)) {
             await document.update({
                 [field]: FieldValue.delete()
             }, { merge: true })
@@ -99,17 +117,24 @@ const commuteHasDecreasedSincePreviousNotification = async (triggerIdentity, dur
     return false
 }
 
-const createEventsArray = async (limit) => {
+const getEvents = async (triggerIdentity, limit) => {
     console.log('creating events array, limit is ', limit)
     if (limit <= 0) {
         return []
     }
-    const query = await firestore.collection('events').orderBy('meta.timestamp', 'desc').limit(limit).get()
-    const events = []
-    query.forEach(event => {
-        events.push(event.data())
-    })
+    const document = await getTriggerIdentity(triggerIdentity)
+    if (!document.exists) {
+        console.log(`document for ${triggerIdentity} does not exist, returning empty array`)
+        return []
+    }
+    const data = document.data()
+    if (!data.hasOwnProperty('events')) {
+        console.log(`events array is empty for triggerIdentity ${triggerIdentity}`)
+        return []
+    }
+    const events = data.events
     console.log('events size is ', events.length)
+    console.log(events)
     return events
 }
 
@@ -181,7 +206,7 @@ app.post(
         if (!withinCommuteTimeWindow(d1, d2, timeZone)) {
             console.log('Not within commute time window.')
             await deleteTriggerIdentityField(triggerIdentity, 'lastNotifiedDuration')
-            res.status(200).send({ data: await createEventsArray(limit) })
+            res.status(200).send({ data: await getEvents(triggerIdentity, limit) })
             return
         }
         console.log(
@@ -219,11 +244,11 @@ app.post(
                                 timestamp: Math.floor(Date.now() / 1000) // This returns a unix timestamp in seconds.
                             }
                         }
-                        await addDocument('events', event.meta.id, event)
+                        await addEvent(triggerIdentity, event)
                     }
                 }
                 res.status(200).send({
-                    data: await createEventsArray(limit)
+                    data: await getEvents(triggerIdentity, limit)
                 })
             })
             .catch((err) => {
@@ -255,7 +280,7 @@ const enableRealtimeAPI = async () => {
         console.log(`${triggerIdDoc.id}: Checking if within commute window for Realtime API`)
         const { windowStart, windowEnd, timeZone } = triggerIdDoc.data()
         if (withinCommuteTimeWindow(windowStart.toDate(), windowEnd.toDate(), timeZone)) {
-            post('https://realtime.ifttt.com/v1/notifications',
+            post('https://realtime.ifttt.com/v1/notifications', //todo send a single request for all triggerIdentities
                 {
                     data: [{
                         trigger_identity: triggerIdDoc.id
