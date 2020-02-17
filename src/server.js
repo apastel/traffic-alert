@@ -31,13 +31,13 @@ const updateTriggerIdentity = async (triggerIdentity, updateProp) => {
 }
 
 const addEvent = async (triggerIdentity, event) => {
-    console.log(`adding event ${event.id} to triggerIdentity ${triggerIdentity}`)
+    console.log(`adding event ${event.meta.id} to triggerIdentity ${triggerIdentity}`)
     const document = firestore.doc(`triggerIdentities/${triggerIdentity}`)
     const snapshot = await document.get()
     if (snapshot.exists) {
         const data = snapshot.data()
         let eventsArr = []
-        if (data.hasOwnProperty('events')) {
+        if (Object.prototype.hasOwnProperty.call(data, 'events')) {
             console.log(`${triggerIdentity}: events field existed already`)
             eventsArr = data.events
         }
@@ -54,7 +54,7 @@ const deleteTriggerIdentityField = async (triggerIdentity, field) => {
     const snapshot = await document.get()
     if (snapshot.exists) {
         const data = snapshot.data()
-        if (data.hasOwnProperty(field)) {
+        if (Object.prototype.hasOwnProperty.call(data, field)) {
             await document.update({
                 [field]: FieldValue.delete()
             }, { merge: true })
@@ -128,13 +128,12 @@ const getEvents = async (triggerIdentity, limit) => {
         return []
     }
     const data = document.data()
-    if (!data.hasOwnProperty('events')) {
+    if (!Object.prototype.hasOwnProperty.call(data, 'events')) {
         console.log(`events array is empty for triggerIdentity ${triggerIdentity}`)
         return []
     }
-    const events = data.events
+    const events = data.events.slice(0, limit)
     console.log('events size is ', events.length)
-    console.log(events)
     return events
 }
 
@@ -176,6 +175,33 @@ app.post(
     serviceKeyCheck,
     async (req, res) => {
         const triggerIdentity = req.body.trigger_identity
+        if (triggerIdentity == null) {
+            return res.status(400).send({
+                errors: [{
+                    message: 'trigger_identity field was missing from request.'
+                }]
+            })
+        }
+        const { triggerFields } = req.body
+        if (triggerFields == null) {
+            return res.status(400).send({
+                errors: [{
+                    message: 'triggerFields object was missing from request.'
+                }]
+            })
+        }
+        if (!Object.prototype.hasOwnProperty.call(triggerFields, 'origin_address') ||
+            !Object.prototype.hasOwnProperty.call(triggerFields, 'destination_address') ||
+            !Object.prototype.hasOwnProperty.call(triggerFields, 'threshold_duration') ||
+            !Object.prototype.hasOwnProperty.call(triggerFields, 'commute_window_start') ||
+            !Object.prototype.hasOwnProperty.call(triggerFields, 'commute_window_end')) {
+            console.error('Request was missing fields')
+            return res.status(400).send({
+                errors: [{
+                    message: 'one or more triggerFields were missing from request'
+                }]
+            })
+        }
         const originAddress = req.body.triggerFields.origin_address
         const destinationAddress = req.body.triggerFields.destination_address
         const thresholdDuration = parseInt(
@@ -206,8 +232,7 @@ app.post(
         if (!withinCommuteTimeWindow(d1, d2, timeZone)) {
             console.log('Not within commute time window.')
             await deleteTriggerIdentityField(triggerIdentity, 'lastNotifiedDuration')
-            res.status(200).send({ data: await getEvents(triggerIdentity, limit) })
-            return
+            return res.status(200).send({ data: await getEvents(triggerIdentity, limit) })
         }
         console.log(
             `Getting directions...\nStart: ${originAddress}\nEnd: ${destinationAddress}`
@@ -276,33 +301,60 @@ const listener = app.listen(process.env.PORT, () => {
 
 const enableRealtimeAPI = async () => {
     const documents = await firestore.collection('triggerIdentities').get()
+    const triggerIdentities = []
     documents.forEach(async (triggerIdDoc) => {
         console.log(`${triggerIdDoc.id}: Checking if within commute window for Realtime API`)
         const { windowStart, windowEnd, timeZone } = triggerIdDoc.data()
         if (withinCommuteTimeWindow(windowStart.toDate(), windowEnd.toDate(), timeZone)) {
-            post('https://realtime.ifttt.com/v1/notifications', //todo send a single request for all triggerIdentities
-                {
-                    data: [{
-                        trigger_identity: triggerIdDoc.id
-                    }]
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'IFTTT-Service-Key': IFTTT_KEY
-                    }
-                }
-            )
-                .then((response) => {
-                    console.log('Notified IFTTT to poll trigger_identity', triggerIdDoc.id)
-                })
-                .catch((error) => {
-                    console.error(error)
-                })
+            triggerIdentities.push({ trigger_identity: triggerIdDoc.id })
         } else {
             console.log(`${triggerIdDoc.id}: Not within commute window for Realtime API`)
             await deleteTriggerIdentityField(triggerIdDoc.id, 'lastNotifiedDuration')
         }
     })
+    if (triggerIdentities.length > 0) {
+        post('https://realtime.ifttt.com/v1/notifications',
+            {
+                data: triggerIdentities
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'IFTTT-Service-Key': IFTTT_KEY
+                }
+            }
+        )
+            .then((response) => {
+                console.log(`Notified IFTTT to poll ${triggerIdentities.length} triggerIdentities`)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }
+}
+
+const createTestEvent = () => {
+    return {
+        commute_duration: 23,
+        origin_address: '123 fake st',
+        destination_address: 'qualcomm',
+        route_to_take: 'I-5',
+        created_at: new Date().toISOString(), // Must be a valid ISOString
+        meta: {
+            id: generateUniqueId(),
+            timestamp: Math.floor(Date.now() / 1000) // This returns a unix timestamp in seconds.
+        }
+    }
+}
+
+const setupTests = async () => {
+    for (let i = 0; i < process.env.MIN_EVENTS; i++) {
+        await addEvent('47d4e993cc2c958c70f06f7a338ee4172f87eddc', createTestEvent())
+    }
+    for (let i = 0; i < process.env.MIN_EVENTS; i++) {
+        await addEvent('b86f8182459e88ab238c55577a40d5d6a8d6c8d7', createTestEvent())
+    }
 }
 
 setInterval(enableRealtimeAPI, 60000)
+setupTests()
