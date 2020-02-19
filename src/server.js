@@ -141,7 +141,7 @@ const getEvents = async (triggerIdentity, limit) => {
 app.get('/', (req, res) => {
     res
         .status(200)
-        .send("Bitchin', the server is running.")
+        .send('Bitchin\', the server is running.')
         .end()
 })
 
@@ -204,9 +204,7 @@ app.post(
         }
         const originAddress = req.body.triggerFields.origin_address
         const destinationAddress = req.body.triggerFields.destination_address
-        const thresholdDuration = parseInt(
-            req.body.triggerFields.threshold_duration, 10
-        )
+        const thresholdDuration = parseInt(req.body.triggerFields.threshold_duration)
         const windowStart = req.body.triggerFields.commute_window_start
         const windowEnd = req.body.triggerFields.commute_window_end
         const limit = (req.body.limit != null) ? req.body.limit : 50
