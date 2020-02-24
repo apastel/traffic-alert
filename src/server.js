@@ -346,11 +346,19 @@ const createTestEvent = () => {
 }
 
 const setupTests = async () => {
-    for (let i = 0; i < process.env.MIN_EVENTS; i++) {
-        await addEvent('47d4e993cc2c958c70f06f7a338ee4172f87eddc', createTestEvent())
+    const triggerIdentityTestA = '47d4e993cc2c958c70f06f7a338ee4172f87eddc'
+    const eventsTestA = await getEvents(triggerIdentityTestA, process.env.MIN_EVENTS)
+    if (eventsTestA.length <= process.env.MIN_EVENTS) {
+        for (let i = 0; i < process.env.MIN_EVENTS; i++) {
+            await addEvent(triggerIdentityTestA, createTestEvent())
+        }
     }
-    for (let i = 0; i < process.env.MIN_EVENTS; i++) {
-        await addEvent('b86f8182459e88ab238c55577a40d5d6a8d6c8d7', createTestEvent())
+    const triggerIdentityTestB = 'b86f8182459e88ab238c55577a40d5d6a8d6c8d7'
+    const eventsTestB = await getEvents(triggerIdentityTestB, process.env.MIN_EVENTS)
+    if (eventsTestB.length <= process.env.MIN_EVENTS) {
+        for (let i = 0; i < process.env.MIN_EVENTS; i++) {
+            await addEvent(triggerIdentityTestB, createTestEvent())
+        }
     }
 }
 
