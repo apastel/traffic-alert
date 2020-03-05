@@ -137,7 +137,6 @@ const getEvents = async (triggerIdentity, limit) => {
     return events
 }
 
-// The status
 app.get('/', (req, res) => {
     res
         .status(200)
