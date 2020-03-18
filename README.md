@@ -1,6 +1,6 @@
 # traffic-alert
 
-NodeJS server backend to connect to an IFTTT service for getting notifications when your commute duration is below a tolerable threshold. Uses Google Maps Directions API. Deploys in to Google Cloud App Engine.
+NodeJS server backend to connect to an IFTTT service for getting notifications when your commute duration is below a tolerable threshold. Uses Google Maps Directions API. Deploys in Google Cloud App Engine.
 
 ## Why Did I Make This?
 
@@ -21,3 +21,15 @@ Because an IFTTT developer license is $199/year, I decided not to publish my IFT
 More likely this will serve as an example of how to create your own IFTTT service.
 
 ## Creating an IFTTT Service
+
+IFTTT has plenty of documentation on how to create your own service. Use `server.js` as an example of how to do things like create triggers, set up endpoint tests, and use the IFTTT Realtime API.
+
+## Technologies Used
+  * [Google Maps Directions API](https://developers.google.com/maps/documentation/directions/start)
+  * [IFTTT](https://platform.ifttt.com/)
+  * [Google Cloud Platform](https://cloud.google.com/)
+  * [Cloud Firestore](https://firebase.google.com/docs/firestore)
+  * [NodeJS](nodejs.org)
+  * [git-secret](https://git-secret.io/)
+  * [eslint](https://eslint.org/)
+  * [axios](https://github.com/axios/axios)
