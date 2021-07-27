@@ -1,11 +1,12 @@
 import express from 'express'
-import { post } from 'axios'
+import pkg from 'axios'
 import { config } from 'dotenv'
-import { serviceKeyCheck } from './middleware'
-import { generateUniqueId } from './helpers'
+import { serviceKeyCheck } from './middleware.js'
+import { generateUniqueId } from './helpers.js'
 import * as GoogleMaps from '@google/maps'
 import { Firestore, FieldValue } from '@google-cloud/firestore'
 
+const { post } = pkg
 config()
 const { IFTTT_KEY } = process.env
 const { GOOGLE_MAPS_KEY } = process.env

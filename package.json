@@ -4,12 +4,13 @@
   "description": "Node app built on express for Google Maps traffic alerts.",
   "main": "src/server.js",
   "scripts": {
-    "start": "node -r esm src/server.js",
+    "start": "node src/server.js",
     "dev": "nodemon --watch src src/server.js",
     "lint": "eslint ."
   },
+  "type": "module",
   "dependencies": {
-    "@google-cloud/firestore": "^3.3.4",
+    "@google-cloud/firestore": "^4.13.2",
     "@google/maps": "^1.0.2",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
